@@ -13,3 +13,12 @@ class User(Base):
     hashed_password = Column(String, nullable=False)
     is_active = Column(Boolean, default=True)
     is_superuser = Column(Boolean, default=False)
+
+class Job(Base):
+    __tablename__ = "jobs"
+
+    id = Column(Integer, primary_key=True, index=True)
+    company = Column(String, nullable=False)
+    link = Column(String, nullable=False)
+    description = Column(String)
+

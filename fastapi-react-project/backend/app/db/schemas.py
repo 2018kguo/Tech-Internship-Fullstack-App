@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 import typing as t
 
-
+#user models
 class UserBase(BaseModel):
     email: str
     is_active: bool = True
@@ -35,6 +35,26 @@ class User(UserBase):
         orm_mode = True
 
 
+#job models
+class JobBase(BaseModel):
+    company: str
+    link: str
+    description: str = None
+
+class JobOut(JobBase):
+    pass
+
+class JobCreate(JobBase):
+    pass
+
+class Job(JobBase):
+    id: int
+
+    class Config:
+        orm_mode = True
+
+
+#auth models
 class Token(BaseModel):
     access_token: str
     token_type: str
@@ -43,3 +63,7 @@ class Token(BaseModel):
 class TokenData(BaseModel):
     email: str = None
     permissions: str = "user"
+
+
+
+

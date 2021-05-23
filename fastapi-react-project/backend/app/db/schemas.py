@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from datetime import datetime
 import typing as t
 
 #user models
@@ -40,6 +41,7 @@ class JobBase(BaseModel):
     company: str
     link: str
     description: str = None
+    date_posted: datetime = None
 
 class JobOut(JobBase):
     pass

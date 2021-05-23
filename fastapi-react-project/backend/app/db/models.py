@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, Integer, String
+from sqlalchemy import Boolean, Column, Integer, String, DateTime
 
 from .session import Base
 
@@ -21,4 +21,5 @@ class Job(Base):
     company = Column(String, nullable=False)
     link = Column(String, nullable=False)
     description = Column(String)
+    date_posted = Column(DateTime)
 

@@ -85,7 +85,8 @@ def create_job(db: Session, job: schemas.JobCreate):
     db_job = models.Job(
         company = job.company,
         link = job.link,
-        description = job.description
+        description = job.description,
+        date_posted = job.date_posted
     )
     db.add(db_job)
     db.commit()

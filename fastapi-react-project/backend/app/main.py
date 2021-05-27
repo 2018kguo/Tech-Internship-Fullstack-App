@@ -10,6 +10,7 @@ from app.db.session import SessionLocal
 from app.core.auth import get_current_active_user
 from app.core.celery_app import celery_app
 from app import tasks
+from fastapi_utils.tasks import repeat_every
 
 
 app = FastAPI(
@@ -33,6 +34,15 @@ async def root():
 @app.get("/api/v1/task")
 async def example_task():
     celery_app.send_task("app.tasks.example_task", args=["Hello World"])
+
+    return {"message": "success"}
+
+# Schedule this celery task for one per hour
+@app.get("/api/v1/task/scrapeJobs")
+@app.on_event("startup")
+@repeat_every(seconds=3600)
+async def scrape_jobs_task():
+    celery_app.send_task("app.tasks.scrape_jobs_task")
 
     return {"message": "success"}
 

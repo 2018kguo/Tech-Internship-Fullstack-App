@@ -31,6 +31,8 @@ services:
       context: backend
       dockerfile: Dockerfile
     command: celery --app app.tasks worker --loglevel=DEBUG -Q main-queue -c 1
+    environment:
+      DATABASE_URL: 'postgresql://postgres:password@postgres:5432/postgres'
 
   flower:  
     image: mher/flower

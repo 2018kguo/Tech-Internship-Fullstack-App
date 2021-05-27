@@ -1,8 +1,7 @@
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 import typing as t
-
-from . import models, schemas
+from app.db import models, schemas
 from app.core.security import get_password_hash
 
 #users
@@ -76,10 +75,12 @@ def get_job(db: Session, job_id: int):
         raise HTTPException(status_code=404, detail="Job not found")
     return job
 
+
 def get_jobs(db: Session, skip: int = 0, limit: int = 100) -> schemas.JobOut:
     #results = db.execute('select * from jobs')
     #print([row.items() for row in results])
     return db.query(models.Job).offset(skip).limit(limit).all()
+
 
 def create_job(db: Session, job: schemas.JobCreate):
     db_job = models.Job(
@@ -93,6 +94,25 @@ def create_job(db: Session, job: schemas.JobCreate):
     db.refresh(db_job)
     return db_job
 
+
+def create_jobs(db: Session, jobs: t.List[schemas.JobCreate]):
+    added = []
+    for job in jobs:
+        jobExistsAlready = db.query(models.Job).filter(models.Job.link == job.link).first()
+        if not jobExistsAlready:
+            db_job = models.Job(
+                company = job.company,
+                link = job.link,
+                description = job.description,
+                date_posted = job.date_posted
+            )
+            db.add(db_job)
+            added.append(db_job)
+    db.commit()
+    print(f"uploaded {str(len(added))} new jobs!")
+    return added
+
+
 def delete_job(db: Session, job_id: int):
     job = get_job(db, job_id)
     if not job:
@@ -100,3 +120,10 @@ def delete_job(db: Session, job_id: int):
     db.delete(job)
     db.commit()
     return job
+
+
+#for testing purposes
+def delete_all_jobs(db: Session):
+    db.query(models.Job).delete()
+    db.commit()
+    return True

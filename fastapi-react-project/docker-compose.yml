@@ -59,9 +59,7 @@ services:
       - "postgres"
 
   frontend:
-    build:
-      context: frontend
-      dockerfile: Dockerfile
+    image: 2018kguo/docker-demo:frontend
     stdin_open: true
     volumes:
       - './frontend:/app:cached'
